@@ -21,3 +21,20 @@ ex) /Simple_test
     ./simple < test.c
     // delete whitespace of test.c and then ECHO
 ```
+
+# MakeFile
+1. make : 컴파일
+    - lexar file name = (TARGET_LEX)
+    - parser file name = (TARGET_PARS)
+    - Execution file name = (EXEC)
+    ```
+    TARGET_LEX = example
+    TARGET_PARS = example
+    EXEC = result
+    ```
+    만약 파일명 바꾸고싶으면 Makefile들어가서 해당 파일명 변경
+
+2. clean
+    - lex, yacc 로 생성된 파일 + 실앻파일 모두 삭제
+
+3. run : 컴파일과 실행까지 한번에

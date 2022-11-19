@@ -1,5 +1,5 @@
 CC = cc
-LIBS = -lfl
+LIBS = -lfl -ly
 LIBL = -lfl
 LEX = flex
 YACC = bison

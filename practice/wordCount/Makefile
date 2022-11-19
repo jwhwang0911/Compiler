@@ -1,10 +1,10 @@
 CC = cc
-LIBS = -lfl
+LIBS = -lfl -ly
 LIBL = -lfl
 LEX = flex
 YACC = bison
 CFLAGS = -DYYDEBUG=1
-TARGET_LEX = Calculater
+TARGET_LEX = wc
 TARGET_PARS = Calculater
 EXEC = result
 .PHONY: run

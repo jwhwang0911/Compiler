@@ -4,8 +4,8 @@ LIBL = -lfl
 LEX = flex
 YACC = bison
 CFLAGS = -DYYDEBUG=1
-TARGET_LEX = Calculater
-TARGET_PARS = Calculater
+TARGET_LEX = go_lexar
+TARGET_PARS = go_yacc
 EXEC = result
 .PHONY: run
 .PHONY: clean

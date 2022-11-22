@@ -2,75 +2,14 @@
 #include<stdio.h>
 %}
 
-%union{
-}
-
-%token PACKAGE IMPORT FUNC VAR
-%token IDENTIFIER
-%token INTEGER FLOAT STRING
-%token IntegerValue FloatValue StringValue
-
-%start program
+%token BREAK DEFAULT SELECT SWITCH CASE FALLTHROUGH IF ELSE GOTO RANGE FOR CONTINUE // 반복문, SELECT문
+%token FUNC INTERFACE DEFER RETURN ARGS// 함수, INTERFACE 관련
+%token GO CHAN// GO CHAN
+%token MAP STRUCT CONST TYPE VAR// 변수 type들
+%token PACKAGE IMPORT
+%token IDENTIFIER IntegerValue FloatValue StringValue
+%token COLON SEMICOLON
 
 %%
 
-program : package import statementslist
-    | program error '\n' {printf("ERROR");}
-    ;
-
-package : PACKAGE IDENTIFIER {printf("package end");};
-
-import : import IMPORT StringValue{printf("import end");}
-        |
-        ;
-
-statementslist :
-                    FuncStatement statementslist
-                |   DeclareStatement statementslist
-                |   Statement statementslist
-                |
-                ;
-
-Statement       :
-                    IDENTIFIERList '=' DataList
-                |
-                ; 
-
-FuncStatement   :
-                    FUNC IDENTIFIER '(' DeclareStatement ')' '{' statementslist '}'
-                |   FUNC IDENTIFIER '(' DeclareStatement ')' TYPE '{' statementslist '}'
-                ;
-
-DeclareStatement    :
-                    VAR IDENTIFIERList TYPE
-                |   VAR IDENTIFIERList TYPE '=' DataList
-                |   VAR IDENTIFIERList '=' DataList
-                |
-                ;
-
-IDENTIFIERList  :
-                    IDENTIFIER IDENTIFIERList
-                |
-                ;
-
-TYPE            :
-                    INTEGER
-                |   FLOAT
-                |   STRING
-
-DataList        :
-                    IntegerValue DataList
-                |   FloatValue DataList
-                |   StringValue DataList
-                |
-                ;
 %%
-
-void yyerror(char *s) {
-    printf("%s",s);
-}
-
-int main(void) {
-    yyparse();
-    return 0;
-}

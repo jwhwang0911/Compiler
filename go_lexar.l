@@ -1,78 +1,231 @@
 %{
-#include <stdio.h>
-#include "go_yacc.tab.h"
-
-enum IdentifyTypes {
-    PACKAGE_TYPE = 1,
-    INT_TYPE,
-    FLOAT_TYPE,
-    STRING_TYPE,
-    FUNC_TYPE
-};
-
-int line_number = 1;
+#include<stdio.h>
+int lineno = 1;
+int tokenno = 0;
 %}
-characters [a-zA-z]
+
 digits [0-9]
 integer (0|[1-9]{digits}*)
 float {integer}\.{digits}+((E|e)[+\-]?{digits}+)?
+identifier [a-zA-Z]([a-zA-Z]|[0-9]|"_")*
 string \"[^"]*\"
-identifier {characters}({characters}|[_-]|{digits})*
-operaters [-+*/]
 
 %%
 
-package         { printf("Package   ");
-                return PACKAGE;
+break            {printf(" Break ");
+                tokenno++;
+                // return BREAK;
                 }
-import          { printf("Import   ");
-                return IMPORT;
+default         {printf(" Default ");
+                tokenno++;
+                // return DEFAULT;
                 }
-int             { printf("Int   ");
-                return INTEGER;
+func            {printf(" FUNC ");
+                tokenno++;
+                // return FUNC;
                 }
-float           { printf("Float   ");
-                return FLOAT;
+interface       {printf(" INTERFACE ");
+                tokenno++;
+                //return INTERFACE;
                 }
-string          { printf("String   ");
-                return STRING;
+select          {printf(" SELECT ");
+                tokenno++;
+                // return SELECT;
                 }
-var             { printf("Declare   ");
-                return VAR;
+case            {printf(" CASE ");
+                tokenno++;
+                // return CASE;
                 }
-func            { printf("Func   ");
-                return FUNC;
+defer           {printf(" DEFER ");
+                tokenno++;
+                // return DEFER;
                 }
-{integer}       { printf("IntegerValue   ");
-                return IntegerValue;
+go              {printf(" GO ");
+                tokenno++;
+                // return GO;
                 }
-{float}         { printf("FloatValue     ");
-                return FloatValue;
+map             {printf(" MAP ");
+                tokenno++;
+                // return MAP;
                 }
-{string}        { printf("String_Value   ");
-                return StringValue;
+struct          {printf(" STRUCT ");
+                tokenno++;
+                // return STRUCT;
                 }
-{identifier}    { printf("Identifier   ");
-                return IDENTIFIER;
+chan            {printf(" CHAN ");
+                tokenno++;
+                // return CHAN;
                 }
-{operaters}     { printf("Ops   "); 
-                return *yytext; 
+else            {printf(" ELSE ");
+                tokenno++;
+                // return ELSE;
                 }
-"{"             { printf("{");
-                return *yytext;
+goto            {printf(" GOTO ");
+                tokenno++;
+                // return GOTO;
                 }
-"}"             { printf("}");
-                return *yytext; 
+package         {printf(" PACKAGE ");
+                tokenno++;
+                // return PACKAGE;
                 }
-"("             {printf("("); return *yytext;}
-")"             {printf(")"); return *yytext;}
-=               { printf("Assign   "); return *yytext; }
+switch          {printf(" SWITCH ");
+                tokenno++;
+                // return SWITCH;
+                }
+const           {printf(" CONST ");
+                tokenno++;
+                // return CONST;
+                }
+fallthrough     {printf(" FALLTHROUGH ");
+                tokenno++;
+                // return FALLTHROUGH;
+                }
+if              {printf(" IF ");
+                tokenno++;
+                // return IF;
+                }
+range           {printf(" RANGE ");
+                tokenno++;
+                // return RANGE;
+                }
+type            {printf(" TYPE ");
+                tokenno++;
+                // return TYPE;
+                }
+continue        {printf(" CONTINUE ");
+                tokenno++;
+                // return CONTINUE;
+                }
+for             {printf(" FOR ");
+                tokenno++;
+                // return FOR;
+                }
+import          {printf(" IMPORT ");
+                tokenno++;
+                // return IMPORT;
+                }
+return          {printf(" RETURN ");
+                tokenno++;
+                // return RETURN;
+                }
+var             {printf(" VAR ");
+                tokenno++;
+                // return VAR;
+                }
 
-\n              { printf("\n"); line_number++; }
-"//".*"\n"          ;
-"/*"(.|"\n")*"*\\"   ;
-[ \t]       ;
-,           ;
+{identifier}    {printf(" Identifier ");
+                tokenno++;
+                // return IDENTIFIER;
+                }
+{integer}       {printf(" IntegerValue ");
+                tokenno++;
+                // return IntegerValue;
+                }
+{float}         {printf(" FloatValue ");
+                tokenno++;
+                // return FloatValue;
+                }
+{string}        {printf(" StringValue ");
+                tokenno++;
+                // return StringValue;
+                }
+
+("=")                          {printf(" Assign ");
+                                tokenno++;
+                                // return *yytext;
+                                }
+(":=")                          {printf( "Go_Assign" );
+                                tokenno++;
+                                // return *yytext;
+                                }
+
+("+")|("-")|("*")|("/")|("%")   {printf(" Arith_Ops ");
+                                tokenno++;
+                                // return *yytext;
+                                }
+("++")|("--")                   {printf(" Incre_Ops ");
+                                tokenno++;
+                                // return *yytext;
+                                }
+
+
+("&")|("|")|("<<")|(">>")|>("&^")|("^")|("~")   {printf(" Bit_Ops ");
+                                        tokenno++;
+                                        // return *yytext;
+                                        }
+("+=")|("-=")|("*=")|("/=")|("%=")      {printf(" Arith_Asign ");
+                                        tokenno++;
+                                        // return *yytext;
+                                        }
+("&=")|("|=")|("^=")|("<<=")|(">>=")|("&^=")   {printf(" Bit_Asign ");
+                                        tokenno++;
+                                        // return *yytext;
+                                        }
+("&&")|("||")|("!")     {printf(" Logic_Ops ");
+                        tokenno++;
+                        // return *yytext;
+                        }
+("==")|("<")|(">")|("!=")|("<=")|(">=") {printf(" Compare_Ops ");
+                                        tokenno++;
+                                        // return *yytext;
+                                        }
+"<-"    {printf(" Channel_Ops ");
+        tokenno++;
+        //return *yytext;
+        }
+
+(".")|(",")   {printf("%s",yytext);
+                tokenno++;
+                // return *yytext;
+                }
+
+"..."   {printf(" ARGS ");
+        tokenno++;
+        // return ARGS;
+        }
+
+"("     {printf(" S_LBRACKET ");
+        tokenno++;
+        // return *yytext;
+        }
+")"     {printf(" S_RBRACKET ");
+        tokenno++;
+        // return *yytext;
+        }
+"{"     {printf(" M_LBRACKET ");
+        tokenno++;
+        // return *yytext;
+        }
+"}"     {printf(" M_RBRACKET ");
+        tokenno++;
+        // return *yytext;
+        }
+"["     {printf(" L_LBRACKET ");
+        tokenno++;
+        // return *yytext;
+        }
+"]"     {printf(" L_RBRACKET ");
+        tokenno++;
+        // return *yytext;
+        }
+
+":"                 {printf(" : ");
+                    tokenno++;
+                    // return COLON;
+                    }
+";"                {printf(" ; ");
+                    tokenno++;
+                    //return SEMICOLON;
+                    }
+"//".*"\n"          {printf("\n%d: ",++lineno); tokenno = 0;}
+"/*"(.|"\n")*"*/"   ;
+" "|"\t"|"\r"      { /*do nothing*/ }
+
+\n                  {printf("\n%d : ",++lineno); tokenno = 0; }
+.           {
+            printf("\n\nline : %d, \n%d-th token : \n%s is not valid token",lineno,++tokenno, yytext );
+            exit(1);
+            };
 
 %%
 
@@ -80,9 +233,8 @@ int yywrap(void) {
     return 1;
 }
 
-/* int main() {
-    while(yylex()) {
-        
-    }
+int main() {
+    printf("%d : ",lineno);
+    yylex();
     return 0;
-} */
+}

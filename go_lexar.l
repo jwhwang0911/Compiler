@@ -9,6 +9,7 @@ integer (0|[1-9]{digits}*)
 float {integer}\.{digits}+((E|e)[+\-]?{digits}+)?
 identifier [a-zA-Z]([a-zA-Z]|[0-9]|"_")*
 string \"[^"]*\"
+imaginary ({integer}|{float})"i"
 
 %%
 
@@ -113,21 +114,25 @@ var             {printf(" VAR ");
                 // return VAR;
                 }
 
-{identifier}    {printf(" Identifier ");
+{identifier}    {printf(" Identifier: %s ",yytext);
                 tokenno++;
                 // return IDENTIFIER;
                 }
-{integer}       {printf(" IntegerValue ");
+{integer}       {printf(" IntegerValue: %s ",yytext);
                 tokenno++;
                 // return IntegerValue;
                 }
-{float}         {printf(" FloatValue ");
+{float}         {printf(" FloatValue: %s ",yytext);
                 tokenno++;
                 // return FloatValue;
                 }
-{string}        {printf(" StringValue ");
+{string}        {printf(" StringValue: %s ",yytext);
                 tokenno++;
                 // return StringValue;
+                }
+{imaginary}     {printf(" ImaginaryValue: %s ",yytext);
+                tokenno++;
+                // return ImaginaryValue;
                 }
 
 ("=")                          {printf(" Assign ");

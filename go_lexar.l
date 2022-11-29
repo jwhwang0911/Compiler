@@ -162,7 +162,7 @@ var             {printf(" VAR ");
                                         tokenno++;
                                         // return *yytext;
                                         }
-("&=")|("|=")|("^=")|("<<=")|(">>=")|("&^=")   {printf(" Bit_Asign ");
+("&=")|("|=")|("^=")|("<<=")|(">>=")|("&^=")   {printf(" Bit_Asign : %s ",yytext);
                                         tokenno++;
                                         // return *yytext;
                                         }

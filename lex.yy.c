@@ -1132,7 +1132,7 @@ YY_RULE_SETUP
 case 37:
 YY_RULE_SETUP
 #line 165 "go_lexar.l"
-{printf(" Bit_Asign ");
+{printf(" Bit_Asign : %s ",yytext);
                                         tokenno++;
                                         // return *yytext;
                                         }

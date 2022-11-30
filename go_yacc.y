@@ -1,127 +1,122 @@
 %{
 #include<stdio.h>
+
+extern int lineno;
+extern int tokenno;
+int yylex();
+void yyerror(char *s);
 %}
 
 %token BREAK DEFAULT SELECT SWITCH CASE FALLTHROUGH IF ELSE GOTO RANGE FOR CONTINUE // 반복문, SELECT문
 %token FUNC INTERFACE DEFER RETURN ARGS// 함수, INTERFACE 관련
 %token GO CHAN// GO CHAN
-%token MAP STRUCT CONST TYPE VAR// 변수 type들
+%token MAP STRUCT CONST TYPE VAR
+%token ANY BOOL BYTE COMPARABLE INT COMPLEX ERROR FLOAT STRING RUNE  // 변수 type들
 %token PACKAGE IMPORT
-%token IDENTIFIER IntegerValue FloatValue StringValue
+%token IDENTIFIER IntegerValue FloatValue StringValue ImaginaryValue BooleanValue
 %token COLON SEMICOLON
 
+%token GODEF INCRE_DECRE LRSHIFT ARITH_ASSIGN BIT_ASSIGN AND OR COMPARE CHANNELOP
 
-%start program // 잘 몰라서 임시로 해뒀어용
+%start SourceFile
+/* 
+
+    GODEF       :=
+    INCRE_DECRE ++ --
+    LRSHIFT     << >> &^
+    ARITH_ASSIGN += -= *= /= %=
+    BIT_ASSIGN   &= |= ^= <<= >>= &^=
+    AND         &&
+    OR          ||
+    COMPARE     (==)|(<)|(>)|(!=)|(<=)|(>=)
+    ARGS        ...
+    CHANNELOP   <-
+
+ */
 
 %%
 
-Type            :
-                    IDENTIFIER | QualifiedIdent
-                | IDENTIFIER '[' Type ']'
-                | IDENTIFIER '[' Type Type']'
-                | IDENTIFIER '[' Type ',' ']'
-                | IDENTIFIER '[' Type Type ',' ']' 
-                | QualifiedIdent '[' Type ']'
-                | QualifiedIdent '[' Type Type ']'
-                | QualifiedIdent '[' Type ',' ']'
-                | QualifiedIdent '[' Type Type ',' ']'
-                | ArrayType 
-                | StructType 
-                | PointerType 
-                | FunctionType 
-                | InterfaceType 
-                | SliceType 
-                | MapType 
-                | ChannelType
-                | '(' Type ')' 
-                | ',' Type
-                |
-                ;
-TypeList :          Type TypeListLoop ;
-TypeArgs :          '[' TypeList CommaLoop ']' ;
-TypeListLoop:       
-                    ',' Type TypeListLoop
-                |
-                ;
-TypeArgsLoop :
-                    TypeArgs TypeArgsLoop
-                |
-                ;
-QualifiedIdent  :
-                    PACKAGE '.' IDENTIFIER
-                |
+Type : TypeName                                 
+        | TypeName TypeArgs
+        | '(' Type ')'
+        | TypeLit
+        ;
+TypeName : IDENTIFIER | QualifiedIdent;
+
+TypeList :
+            TypeList ',' Type
+        |   Type
+        ;
+TypeArgs :          '[' TypeList ']'
                 ;
 
-ElementType     :
-                    Type
-                |
-                ;
+TypeLit : ArrayType | StructType | PointerType | FunctionType | InterfaceType |
+            SliceType | MapType | ChannelType
+        | ANY
+        | FLOAT
+        | BOOL
+        | BYTE
+        | COMPARABLE
+        | COMPLEX
+        | ERROR 
+        | INT
+        | RUNE
+        | STRING
+
+QualifiedIdent  :
+                    IDENTIFIER '.' IDENTIFIER;
 
 ArrayType       :
-                    '[' IntegerValue ']' ElementType
-                |
-                ;
+                    '[' Expression ']' Type;
 
 SliceType       :  
-                    '[' ']' ElementType
-                |
-                ;
+                    '[' ']' Type;
 
 StructType      :
-                STRUCT '{' StructType '}' 
-                | IdentifierList Type SEMICOLON
-                | IdentifierList Type SEMICOLON StringValue
-                | TYPE SEMICOLON
-                | '*' TYPE SEMICOLON
-                | TYPE IntegerValue SEMICOLON
-                | '*' TYPE IntegerValue SEMICOLON
-                | TYPE SEMICOLON StringValue
-                | '*' TYPE SEMICOLON StringValue
-                | TYPE IntegerValue SEMICOLON StringValue
-                | '*' TYPE IntegerValue SEMICOLON StringValue
-                ;
+                STRUCT '{' StructTypeLoop '}'
 
-IdentifierList  :
-                    IDENTIFIER
-                | IDENTIFIER ',' IDENTIFIER
+StructTypeLoop : FieldDecl SEMICOLON ';' StructTypeLoop
                 |
                 ;
+FieldDecl       :  IdentifierList Type
+                |  IdentifierList Type StringValue
+                |  EmbeddedField
+                |  EmbeddedField StringValue;
+EmbeddedField   :   TypeName
+                |   '*' TypeName
+                |   TypeName TypeArgs
+                |   '*' TypeName TypeArgs;
+
+
 
 PointerType     :
-                    '*' Type
-                |
+                    '*' Type;
+
+FunctionType   :    FUNC Signature 
+
+Signature       :
+                    Parameters
+                |   Parameters Type
+                ;
+                
+Parameters      :
+                    '(' ')'
+                |   '(' ParameterList ')'
+                |   '(' ParameterList ',' ')'
+                ;
+Result          : Parameters
+                | Type
                 ;
 
-FunctionType   :
-                    FUNC '(' ')'
-                | FUNC '(' ParameterList ')'
-                | FUNC '(' ParameterList ',' ')'
-                | FUNC '(' ')' '(' ')'
-                | FUNC '(' ParameterList ')' '(' ')'
-                | FUNC '(' ParameterList ',' ')' '(' ')'
-                | FUNC '(' ')' '(' ParameterList ')'
-                | FUNC '(' ParameterList ')' '(' ParameterList ')'
-                | FUNC '(' ParameterList ',' ')' '(' ParameterList ')'
-                | FUNC '(' ')' '(' ParameterList ',' ')'
-                | FUNC '(' ParameterList ')' '(' ParameterList ',' ')'
-                | FUNC '(' ParameterList ',' ')' '(' ParameterList ',' ')'
-                | FUNC '(' ')' Type
-                | FUNC '(' ParameterList ')' Type
-                | FUNC '(' ParameterList ',' ')' Type      
-                |
-                ;            
+ParameterList   : ParameterDecl
+                | ParameterDecl ',' ParameterDecl;
 
-ParameterList   :
-                Type ParameterList
-                | IdentifierList Type ParameterList
-                | IdentifierList ARGS Type ParameterList
-                | ARGS Type ParameterList
-                | ',' Type
-                | ',' IdentifierList Type
-                | ',' IdentifierList ARGS Type
-                | ',' ARGS Type
-                |
-                ;
+ParameterDecl   :   Type
+                |   IdentifierList Type
+                |   ARGS Type
+                |   IdentifierList ARGS Type;
+
+
 
 InterfaceType   :
                 INTERFACE '{' InterfaceType '}' 
@@ -141,57 +136,168 @@ InterfaceType   :
                 | IDENTIFIER '(' ParameterList ')' Type SEMICOLON
                 | IDENTIFIER '(' ParameterList ',' ')' Type SEMICOLON 
                 | TypeElem SEMICOLON
-                |
                 ;
+
+ // MethodName      : IDENTIFIER ;
 
 TypeElem        :
                     Type TypeElem 
                 | '~' Type TypeElem 
                 | '|' Type 
                 | '|' '~' Type 
-                |
                 ;
 
 MapType         :
-                    MAP '[' Type ']' ElementType
-                |
-                ;
+                    MAP '[' Type ']' Type;
 
 ChannelType     :
-                    CHAN ElementType
-                | CHAN '<-' ElementType
-                | '<-' CHAN
+                    CHAN Type
+                | CHAN CHANNELOP Type
+                | CHANNELOP CHAN Type
+                ;
+
+
+/*------------------------ Declarations and scope section ------------------------*/ // 12novel30
+Declaration     : ConstDecl | TypeDecl | VarDecl ;
+
+TopLevelDecl    : Declaration | FunctionDecl | MethodDecl ;
+
+// Constant declarations
+ConstDecl       : 
+                    CONST ConstSpec
+                |   CONST '(' ConstSpecLoop ')' 
+                ; 
+
+ConstSpec       :
+                    IdentifierList Type '=' ExpressionList
+                |   IdentifierList '=' ExpressionList
+                |   IdentifierList
+                ;
+
+ConstSpecLoop   :
+                    ConstSpec SEMICOLON ConstSpecLoop
                 |
                 ;
 
-// from reference.y
-program : package import StatementList
-    | program error '\n' {printf("ERROR");}
-    ;
-package : PACKAGE IDENTIFIER {printf("package end");};
-import : import IMPORT StringValue{printf("import end");}
+IdentifierList  : 
+                    IdentifierList ',' IDENTIFIER
+                |   IDENTIFIER
+                ;                    
+ExpressionList  :    
+                    ExpressionList ',' Expression
+                |   Expression
+                ;
+
+// Type declarations
+TypeDecl            :
+                        TYPE TypeSpec
+                    |   TYPE '(' TypeSpecLoop ')'
+                    ;
+                    
+TypeSpec            :
+                        AliasDecl | TypeDef ;
+
+TypeSpecLoop        :
+                        TypeSpec SEMICOLON TypeSpecLoop
+                    |
+                    ;
+// Alias declarations
+AliasDecl           : IDENTIFIER '=' Type ;
+// Type definitions
+TypeDef             : 
+                        IDENTIFIER Type
+                    |   IDENTIFIER TypeParameters Type
+                    ;
+// Type parameter declarations
+TypeParameters      : '[' TypeParamList ']'
+                    | '[' TypeParamList ',' ']'
+                    ;
+TypeParamList :
+                    TypeParamList ',' TypeParamDecl
+                |   TypeParamDecl;
+TypeParamDecl : IdentifierList TypeElem ;
+// Type constraints
+// TypeConstraint : TypeElem ;
+// Variable declarations
+VarDecl : 
+            VAR VarSpec
+        |   VAR '(' VarSpecLoop ')'
+        ;
+VarSpec : 
+            IdentifierList Type '=' ExpressionList
+        |   IdentifierList Type 
+        |   IdentifierList '=' ExpressionList
+        ;
+VarSpecLoop : 
+            VarSpec SEMICOLON VarSpecLoop
         |
         ;
+// Short variable declarations
+ShortVarDecl : IdentifierList GODEF ExpressionList ;
+// Function declarations
+FunctionDecl :
+                FUNC IDENTIFIER TypeParameters Signature Block
+            |   FUNC IDENTIFIER Signature Block
+            |   FUNC IDENTIFIER TypeParameters Signature
+            |   FUNC IDENTIFIER Signature
+            ; // FunctionName
+// FunctionName : IDENTIFIER;
+MethodDecl :
+                FUNC Parameters IDENTIFIER Signature Block
+            |   FUNC Parameters IDENTIFIER Signature
+            ; // MethodName
+
+
 
 /*------------------------ Expressions section ------------------------*/ // 12novel30
-Operand : 
+Operand     : 
                 Literal
-            |   OperandName TypeArgsLoop
+            |   OperandName TypeArgs
+            |   OperandName
             |   '(' Expression ')'
             ;
-Literal :
+
+Literal     :
                 BasicLit
             |   CompositeLit
             |   FunctionLit
             ;
-BasicLit :      int_lit | float_lit | imaginary_lit | rune_lit | string_lit ; // 추가 필요
-OperandName :   IDENTIFIER | QualifiedIdent ;
-Conversion :    Type '(' Expression CommaLoop ')' ;
-CommaLoop :
-                ',' CommaLoop
-            |
+
+BasicLit    :      
+                IntegerValue 
+            | FloatValue 
+            | ImaginaryValue 
+            | StringValue
+            ; // 추가 필요 - rune_lit |
+// Composite literals
+CompositeLit : LiteralType LiteralValue;   
+LiteralType :   StructType | ArrayType | '[' ARGS ']' Type |
+                SliceType | MapType | TypeName | TypeName TypeArgs ;
+LiteralValue :
+                '{' ElementList ',' '}'
+            |   '{' ElementList '}'
+            |   '{' '}'
             ;
-MethodExpr : Type '.' IDENTIFIER ;
+// ElementList : KeyedElement KeyedElementLoop ;
+KeyedElement : 
+                Key ':' Element
+            |   Element
+            ;
+ElementList :
+                ElementList ',' KeyedElement
+            |   KeyedElement ;
+
+
+
+Key : IDENTIFIER | Expression | LiteralValue ; // fieldname
+// FieldName : IDENTIFIER ;
+Element : Expression | LiteralValue ;         
+// Function literals
+FunctionLit : FUNC Signature Block ;
+
+OperandName :   IDENTIFIER | QualifiedIdent ;
+
+// Primary expressions
 PrimaryExpr :
                 Operand 
             |   Conversion 
@@ -205,50 +311,53 @@ PrimaryExpr :
 Selector :      '.' IDENTIFIER ;
 Index :         '[' Expression ']' ;
 Slice :         
-                '[' ExpressionLoop ':' ExpressionLoop ']'
-            |   '[' ExpressionLoop ':' Expression ':' Expression ']'
+                '[' ExpressionLoop COLON ExpressionLoop ']'
+            |   '[' ExpressionLoop COLON Expression COLON Expression ']'
             ;
 ExpressionLoop :    
-                Expression ExpressionLoop
+                Expression
             |
             ;
 TypeAssertion : '.' '(' Type ')' ;
 Arguments :     '(' ArgumentsLoop ')' ;
-ArgumentsLoop : 
-                ExpressionList '...' ',' ArgumentsLoop
-            |   Type ExpressionListLoop '...' ',' ArgumentsLoop
-            |   ExpressionList '...' ArgumentsLoop
-            |   Type ExpressionListLoop '...' ArgumentsLoop
-            |   ExpressionList ',' ArgumentsLoop
-            |   Type ExpressionListLoop ',' ArgumentsLoop
-            |   ExpressionList ArgumentsLoop
-            |   Type ExpressionListLoop  ArgumentsLoop
+ArgumentsLoop :
+              ExpressionList ARGS ','
+            | ExpressionList ARGS
+            | ExpressionList ','
+            | ExpressionList
+            | Type ARGS ','
+            | Type ARGS
+            | Type ','
+            | Type
+            | Type ',' ExpressionList ARGS ','
+            | Type ',' ExpressionList ARGS
+            | Type ',' ExpressionList ','
+            | Type ',' ExpressionList
             |
             ;
-ExpressionListLoop :
-                ',' ExpressionList ExpressionListLoop
-            |
-            ;
+// Method expressions
+MethodExpr : ParametersType '.' IDENTIFIER ;
+ParametersType : Type ;
 
 /*------------------------ Operators section ------------------------*/ // 12novel30
 Expression :
                     UnaryExpr
                 |   Expression binary_op Expression
                 ;
-ExpressionList :
-                Expression ',' Expression
-            |
-            ;
+
 UnaryExpr :
                     PrimaryExpr
                 |   unary_op UnaryExpr
                 ;
-binary_op :         '||' | '&&' | rel_op | add_op | mul_op ;
-rel_op :            '==' | '!=' | '<' | '<=' | '>' | '>=' ;
+binary_op :         AND | OR | rel_op | add_op | mul_op ;
+rel_op :            COMPARE ;
 add_op :            '+' | '-' | '|' | '^' ;
-mul_op :            '*' | '/' | '%' | '<<' | '>>' | '&' | '&^' ;
-unary_op :          '+' | '-' | '!' | '^' | '*' | '&' | '<-' ;
-
+mul_op :            '*' | '/' | '%' | LRSHIFT | '&'  ;
+unary_op :          '+' | '-' | '!' | '^' | '*' | '&' | CHANNELOP ;
+// Conversions
+Conversion :
+        Type '(' Expression ')'
+        ;
 /*------------------------ Statements section ------------------------*/ // 12novel30
 Statement :	// main
 				Declaration // 추가 필요
@@ -266,12 +375,8 @@ Statement :	// main
 			|	SelectStmt //terminating
 			|	ForStmt //terminating
 			|	DeferStmt
-			|
 			;
-LabeledStmt :
-				IDENTIFIER ':' Statement
-			|
-			;
+LabeledStmt :   IDENTIFIER COLON Statement ;
 SimpleStmt :
 				EmptyStmt
 			|	ExpressionStmt
@@ -283,17 +388,13 @@ SimpleStmt :
 //for SimpleStmt
 EmptyStmt 	:       ;
 ExpressionStmt :    Expression ;
-SendStmt :          Channel '<-' Expression ;
+SendStmt :          Channel CHANNELOP Expression ;
 Channel : //for SendStmt 
 			Expression ;
-IncDecStmt :
-                    Expression '++'
-                |	Expression '--'
-                ;
+IncDecStmt :        Expression INCRE_DECRE ;
 Assignment :        ExpressionList assign_op ExpressionList ;
 assign_op : //for Assignment
-			add_op '='
-		|	mul_op '='
+			ARITH_ASSIGN
 		|   '='
 		;
 //
@@ -303,118 +404,180 @@ ReturnStmt :
         |   RETURN
 		;
 BreakStmt :
-			BREAK Label
+			BREAK IDENTIFIER //label
         |   BREAK
 		;
 ContinueStmt :
-			CONTINUE Label
+			CONTINUE IDENTIFIER //label
         |   CONTINUE
 		;
 GotoStmt :          GOTO IDENTIFIER ; //label
 FallthroughStmt :   FALLTHROUGH ;
 Block :             '{' StatementList '}' ;
 StatementList : //for block
-                    Statement ';' StatementList 
-				|
+                    Statement SEMICOLON StatementList
+                |
 				;
 IfStmt :
-			IF SimpleStmt ';' Expression Block ELSE IfStmt
-		| 	IF SimpleStmt ';' Expression Block ELSE Block
+			IF SimpleStmt SEMICOLON Expression Block ELSE IfStmt
+		| 	IF SimpleStmt SEMICOLON Expression Block ELSE Block
 		|   IF Expression Block ELSE IfStmt
         |   IF Expression Block ELSE Block
         |   IF Expression Block
 		;
-SwitchStmt :
+SwitchStmt : // 다 봤음
 			ExprSwitchStmt
 		|	TypeSwitchStmt
-		|
 		;
 ExprSwitchStmt : //for SwitchStmt
-			SWITCH SimpleStmt ';' Expression '{' ExprCaseClauseLoop'}'
-		|   SWITCH Expression '{' ExprCaseClauseLoop'}'
-		|   SWITCH SimpleStmt ';' '{' ExprCaseClauseLoop'}'
-        |   SWITCH '{' ExprCaseClauseLoop'}'
+			SWITCH SimpleStmtBrakets ExpressionBrakets '{' ExprCaseClauseLoop'}'
+        ;
+SimpleStmtBrakets : //for SwitchStmt
+            SimpleStmt SEMICOLON
+        |
+        ;
+ExpressionBrakets : //for SwitchStmt
+            Expression
+        |
         ;
 ExprCaseClause : //for SwitchStmt
-			ExprSwitchCase ':' StatementList ;
+			ExprSwitchCase COLON StatementList ;
 ExprCaseClauseLoop : //for SwitchStmt
-            ExprCaseClause ExprCaseClauseLoop ;
+            ExprCaseClause ExprCaseClauseLoop
+        |
+        ;
 ExprSwitchCase : //for SwitchStmt
 			CASE ExpressionList
 		|	DEFAULT
 		;
 TypeSwitchStmt : //for SwitchStmt
-			SWITCH SimpleStmt ';' TypeSwitchGuard '{' TypeCaseClauseLoop '}'
-        |   SWITCH TypeSwitchGuard '{' TypeCaseClauseLoop '}'
+			SWITCH SimpleStmtBrakets TypeSwitchGuard '{' TypeCaseClauseLoop '}'
         ;
 TypeSwitchGuard : //for SwitchStmt
-			IDENTIFIER ':=' PrimaryExpr '.' '(' 'type' ')'
-        |   PrimaryExpr '.' '(' 'type' ')'
+			IdetifierGodefBrakets PrimaryExpr '.' '(' Type ')'
 		;
+IdetifierGodefBrakets : //for SwitchStmt
+            IDENTIFIER GODEF
+        |
+        ;
 TypeCaseClause : //for SwitchStmt
-			TypeSwitchCase ':' StatementList
+			TypeSwitchCase COLON StatementList
 		;
 TypeCaseClauseLoop : //for SwitchStmt
-            TypeCaseClause TypeCaseClauseLoop ;
+            TypeCaseClause TypeCaseClauseLoop
+        |
+        ;
 TypeSwitchCase : //for SwitchStmt
 			CASE TypeList
 		|	DEFAULT
 		;
-SelectStmt :
+/*
+내가 for range 볼테니까
+select에서 어떤거 안되는지 찾아봐줄 수잇어/?
+
+*/
+SelectStmt : // 다 봤음
 			SELECT '{' CommClauseLoop '}'
 		;
 CommClause : //for SelectStmt
-			CommCase ':' StatementList
+			CommCase COLON StatementList
 		;
 CommClauseLoop : //for SelectStmt
             CommClause CommClauseLoop
+        |
         ;
 CommCase : //for SelectStmt
-			CASE SendStmt
 		|	CASE RecvStmt
         |   DEFAULT
 		;
 RecvStmt : //for SelectStmt
 			ExpressionList '=' RecvExpr
-		|	IdentifierList ':=' RecvExpr
+		|	IdentifierList GODEF RecvExpr
         |   RecvExpr
 		;
 RecvExpr : //for SelectStmt
 			Expression
 		;
 ForStmt :
-			FOR Condition Block
-		|	FOR ForClause Block
-		|	FOR RangeClause Block
-        |   FOR Block
+			FOR ForClauseBracket Block
 		;
+ForClauseBracket :
+            Condition
+        |   ForClause
+        |   RangeClause
+        |
+        ;
 Condition : //for ForStmt 
 			Expression
 		;
 ForClause : //for ForStmt
-			InitStmt ';' Condition ';' PostStmt
-        |   ';' Condition ';' PostStmt
-        |   InitStmt ';'';' PostStmt
-        |   InitStmt ';' Condition ';'
-        |   ';' ';' PostStmt
-        |   ';' Condition ';'
-        |   InitStmt ';' ';'
-        |   ';' ';'
+			InitStmtBracket SEMICOLON ConditionBracket SEMICOLON PostStmtBracket
 		;
 InitStmt : //for ForStmt
 			SimpleStmt
 		;
+InitStmtBracket: //for ForStmt
+            InitStmt
+        |
+        ;
+ConditionBracket : //for ForStmt
+            Condition
+        |
+        ;
 PostStmt : //for ForStmt
 			SimpleStmt
 		;
+PostStmtBracket : //for ForStmt
+            PostStmt
+        ;
 RangeClause : //for ForStmt
 			ExpressionList '=' RANGE Expression
-		|	IdentifierList ':=' RANGE Expression
+		|	IdentifierList GODEF RANGE Expression
         |   RANGE Expression
 		;
 DeferStmt : 
 			DEFER Expression
 		;
+
+SourceFile      :
+                    PackageClause SEMICOLON ImportLoop TopLevelLoop
+                ;
+
+ImportLoop      :
+                    ImportDecl SEMICOLON ImportLoop
+                |
+                ;
+
+TopLevelLoop    :
+                    TopLevelDecl SEMICOLON  TopLevelLoop
+                |
+                ;
+
+PackageClause   :
+                    PACKAGE IDENTIFIER ;            
+
+// import
+ImportDecl : 
+                IMPORT ImportSpec
+            |   IMPORT '(' ImportSpecLoop ')'
+            ;
+ImportSpec : 
+                '.' ImportPath
+            |   IDENTIFIER ImportPath
+            |   ImportPath  
+            ;
+ImportSpecLoop :
+                ImportSpec SEMICOLON ImportSpecLoop
+            |
+            ;
+ImportPath : StringValue ;
+
 %%
-/* 그 내꺼 노션 보면 EBNF Grammer 어떻게 짜는지 있는 지 있음 */
-/* 민선ㅇ Grammer에서 string token 쓰고 싶으면 작은 따옴표로 해야돼 큰 따옴표는 안되더라 */
+
+void yyerror(char *s) {
+    printf("\nline %d: %s \n", lineno, s);
+}
+
+int main() {
+    yyparse();
+}

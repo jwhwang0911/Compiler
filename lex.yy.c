@@ -652,8 +652,8 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 ".\\go_lexar.l"
-#line 2 ".\\go_lexar.l"
+#line 1 "go_lexar.l"
+#line 2 "go_lexar.l"
 #include<stdio.h>
 #include"go_yacc.tab.h"
 int lineno = 1;
@@ -845,7 +845,7 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 15 ".\\go_lexar.l"
+#line 15 "go_lexar.l"
 
 
 #line 852 "lex.yy.c"
@@ -933,7 +933,7 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 17 ".\\go_lexar.l"
+#line 17 "go_lexar.l"
 {printf(" Break ");
                 tokenno++;
                 return BREAK;
@@ -941,7 +941,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 21 ".\\go_lexar.l"
+#line 21 "go_lexar.l"
 {printf(" Default ");
                 tokenno++;
                 return DEFAULT;
@@ -949,7 +949,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 25 ".\\go_lexar.l"
+#line 25 "go_lexar.l"
 {printf(" FUNC ");
                 tokenno++;
                 return FUNC;
@@ -957,7 +957,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 29 ".\\go_lexar.l"
+#line 29 "go_lexar.l"
 {printf(" INTERFACE ");
                 tokenno++;
                 return INTERFACE;
@@ -965,7 +965,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 33 ".\\go_lexar.l"
+#line 33 "go_lexar.l"
 {printf(" SELECT ");
                 tokenno++;
                 return SELECT;
@@ -973,7 +973,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 37 ".\\go_lexar.l"
+#line 37 "go_lexar.l"
 {printf(" CASE ");
                 tokenno++;
                 return CASE;
@@ -981,7 +981,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 41 ".\\go_lexar.l"
+#line 41 "go_lexar.l"
 {printf(" DEFER ");
                 tokenno++;
                 return DEFER;
@@ -989,7 +989,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 45 ".\\go_lexar.l"
+#line 45 "go_lexar.l"
 {printf(" GO ");
                 tokenno++;
                 return GO;
@@ -997,7 +997,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 49 ".\\go_lexar.l"
+#line 49 "go_lexar.l"
 {printf(" MAP ");
                 tokenno++;
                 return MAP;
@@ -1005,7 +1005,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 53 ".\\go_lexar.l"
+#line 53 "go_lexar.l"
 {printf(" STRUCT ");
                 tokenno++;
                 return STRUCT;
@@ -1013,7 +1013,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 57 ".\\go_lexar.l"
+#line 57 "go_lexar.l"
 {printf(" CHAN ");
                 tokenno++;
                 return CHAN;
@@ -1021,7 +1021,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 61 ".\\go_lexar.l"
+#line 61 "go_lexar.l"
 {printf(" ELSE ");
                 tokenno++;
                 return ELSE;
@@ -1029,7 +1029,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 65 ".\\go_lexar.l"
+#line 65 "go_lexar.l"
 {printf(" GOTO ");
                 tokenno++;
                 return GOTO;
@@ -1037,7 +1037,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 69 ".\\go_lexar.l"
+#line 69 "go_lexar.l"
 {printf(" PACKAGE ");
                 tokenno++;
                 return PACKAGE;
@@ -1045,7 +1045,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 73 ".\\go_lexar.l"
+#line 73 "go_lexar.l"
 {printf(" SWITCH ");
                 tokenno++;
                 return SWITCH;
@@ -1053,7 +1053,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 77 ".\\go_lexar.l"
+#line 77 "go_lexar.l"
 {printf(" CONST ");
                 tokenno++;
                 return CONST;
@@ -1061,7 +1061,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 81 ".\\go_lexar.l"
+#line 81 "go_lexar.l"
 {printf(" FALLTHROUGH ");
                 tokenno++;
                 return FALLTHROUGH;
@@ -1069,7 +1069,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 85 ".\\go_lexar.l"
+#line 85 "go_lexar.l"
 {printf(" IF ");
                 tokenno++;
                 return IF;
@@ -1077,7 +1077,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 89 ".\\go_lexar.l"
+#line 89 "go_lexar.l"
 {printf(" RANGE ");
                 tokenno++;
                 return RANGE;
@@ -1085,7 +1085,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 93 ".\\go_lexar.l"
+#line 93 "go_lexar.l"
 {printf(" TYPE ");
                 tokenno++;
                 return TYPE;
@@ -1093,7 +1093,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 97 ".\\go_lexar.l"
+#line 97 "go_lexar.l"
 {printf(" CONTINUE ");
                 tokenno++;
                 return CONTINUE;
@@ -1101,7 +1101,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 101 ".\\go_lexar.l"
+#line 101 "go_lexar.l"
 {printf(" FOR ");
                 tokenno++;
                 return FOR;
@@ -1109,7 +1109,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 105 ".\\go_lexar.l"
+#line 105 "go_lexar.l"
 {printf(" IMPORT ");
                 tokenno++;
                 return IMPORT;
@@ -1117,7 +1117,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 109 ".\\go_lexar.l"
+#line 109 "go_lexar.l"
 {printf(" RETURN ");
                 tokenno++;
                 return RETURN;
@@ -1125,27 +1125,27 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 113 ".\\go_lexar.l"
+#line 113 "go_lexar.l"
 {printf(" VAR ");
                 tokenno++;
                 return VAR;
                 }
 	YY_BREAK
 case 26:
-#line 118 ".\\go_lexar.l"
+#line 118 "go_lexar.l"
 case 27:
 YY_RULE_SETUP
-#line 118 ".\\go_lexar.l"
+#line 118 "go_lexar.l"
 {printf(" Boolean: %s ",yytext);
                 tokenno++;
                 return BooleanValue;
                 }
 	YY_BREAK
 case 28:
-#line 124 ".\\go_lexar.l"
+#line 124 "go_lexar.l"
 case 29:
 YY_RULE_SETUP
-#line 124 ".\\go_lexar.l"
+#line 124 "go_lexar.l"
 {printf(" Int ");
                         tokenno++;
                         return INT;
@@ -1153,7 +1153,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 128 ".\\go_lexar.l"
+#line 128 "go_lexar.l"
 {printf(" Any");
                 tokenno++;
                 return ANY;
@@ -1161,7 +1161,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 132 ".\\go_lexar.l"
+#line 132 "go_lexar.l"
 {printf(" Bool ");
                 tokenno++;
                 return BOOL;
@@ -1169,7 +1169,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 136 ".\\go_lexar.l"
+#line 136 "go_lexar.l"
 {printf(" Byte ");
                 tokenno++;
                 return BYTE;
@@ -1177,17 +1177,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 140 ".\\go_lexar.l"
+#line 140 "go_lexar.l"
 {printf(" Comparable ");
                 tokenno++;
                 return COMPARABLE;
                 }
 	YY_BREAK
 case 34:
-#line 145 ".\\go_lexar.l"
+#line 145 "go_lexar.l"
 case 35:
 YY_RULE_SETUP
-#line 145 ".\\go_lexar.l"
+#line 145 "go_lexar.l"
 {printf(" Complex ");
                                 tokenno++;
                                 return COMPLEX;
@@ -1195,19 +1195,19 @@ YY_RULE_SETUP
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 150 ".\\go_lexar.l"
+#line 150 "go_lexar.l"
 {printf(" ERROR ");
                 tokenno++;
                 return ERROR;
                 }
 	YY_BREAK
 case 37:
-#line 156 ".\\go_lexar.l"
+#line 156 "go_lexar.l"
 case 38:
-#line 157 ".\\go_lexar.l"
+#line 157 "go_lexar.l"
 case 39:
 YY_RULE_SETUP
-#line 157 ".\\go_lexar.l"
+#line 157 "go_lexar.l"
 {printf(" FLOAT ");
                 tokenno++;
                 return FLOAT;
@@ -1215,7 +1215,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 162 ".\\go_lexar.l"
+#line 162 "go_lexar.l"
 {printf(" STRING ");
                 tokenno++;
                 return STRING;
@@ -1223,7 +1223,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 167 ".\\go_lexar.l"
+#line 167 "go_lexar.l"
 {printf(" RUNE ");
                 tokenno++;
                 return RUNE;
@@ -1231,7 +1231,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 172 ".\\go_lexar.l"
+#line 172 "go_lexar.l"
 {printf(" Assign ");
                 tokenno++;
                 return *yytext;
@@ -1239,7 +1239,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 176 ".\\go_lexar.l"
+#line 176 "go_lexar.l"
 {printf( "Go_Assign" );
                                 tokenno++;
                                 return GODEF;
@@ -1247,7 +1247,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 181 ".\\go_lexar.l"
+#line 181 "go_lexar.l"
 {printf(" Arith_Ops ");
                                 tokenno++;
                                 return *yytext;
@@ -1255,7 +1255,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 185 ".\\go_lexar.l"
+#line 185 "go_lexar.l"
 {printf(" Incre_Ops ");
                                 tokenno++;
                                 return INCRE_DECRE;
@@ -1263,7 +1263,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 191 ".\\go_lexar.l"
+#line 191 "go_lexar.l"
 {printf(" Bit_Ops ");
                                 tokenno++;
                                 return *yytext;
@@ -1271,7 +1271,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 196 ".\\go_lexar.l"
+#line 196 "go_lexar.l"
 {printf(" Bit_Ops ");
                         tokenno++;
                         return LRSHIFT;
@@ -1279,7 +1279,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 201 ".\\go_lexar.l"
+#line 201 "go_lexar.l"
 {printf(" Arith_Asign ");
                                         tokenno++;
                                         return ARITH_ASSIGN;
@@ -1287,7 +1287,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 205 ".\\go_lexar.l"
+#line 205 "go_lexar.l"
 {printf(" Bit_Asign : %s ",yytext);
                                         tokenno++;
                                         return BIT_ASSIGN;
@@ -1295,7 +1295,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 209 ".\\go_lexar.l"
+#line 209 "go_lexar.l"
 {printf(" And ");
                 tokenno++;
                 return AND;
@@ -1303,7 +1303,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 213 ".\\go_lexar.l"
+#line 213 "go_lexar.l"
 {printf(" Or ");
                         tokenno++;
                         return OR;
@@ -1311,7 +1311,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 218 ".\\go_lexar.l"
+#line 218 "go_lexar.l"
 {printf(" Logic_Ops ");
                         tokenno++;
                         return *yytext;
@@ -1319,7 +1319,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 222 ".\\go_lexar.l"
+#line 222 "go_lexar.l"
 {printf(" Compare_Ops ");
                                         tokenno++;
                                         return COMPARE;
@@ -1327,7 +1327,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 226 ".\\go_lexar.l"
+#line 226 "go_lexar.l"
 {printf(" Channel_Ops ");
         tokenno++;
         return CHANNELOP;
@@ -1335,7 +1335,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 231 ".\\go_lexar.l"
+#line 231 "go_lexar.l"
 {printf("%s",yytext);
                 tokenno++;
                 return *yytext;
@@ -1343,7 +1343,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 236 ".\\go_lexar.l"
+#line 236 "go_lexar.l"
 {printf(" ARGS ");
         tokenno++;
         return ARGS;
@@ -1351,7 +1351,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 241 ".\\go_lexar.l"
+#line 241 "go_lexar.l"
 {printf(" S_LBRACKET ");
         tokenno++;
         return *yytext;
@@ -1359,7 +1359,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 245 ".\\go_lexar.l"
+#line 245 "go_lexar.l"
 {printf(" S_RBRACKET ");
         tokenno++;
         return *yytext;
@@ -1367,7 +1367,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 249 ".\\go_lexar.l"
+#line 249 "go_lexar.l"
 {printf(" M_LBRACKET ");
         tokenno++;
         return *yytext;
@@ -1375,7 +1375,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 253 ".\\go_lexar.l"
+#line 253 "go_lexar.l"
 {printf(" M_RBRACKET ");
         tokenno++;
         return *yytext;
@@ -1383,7 +1383,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 257 ".\\go_lexar.l"
+#line 257 "go_lexar.l"
 {printf(" L_LBRACKET ");
         tokenno++;
         return *yytext;
@@ -1391,7 +1391,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 261 ".\\go_lexar.l"
+#line 261 "go_lexar.l"
 {printf(" L_RBRACKET ");
         tokenno++;
         return *yytext;
@@ -1399,7 +1399,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 266 ".\\go_lexar.l"
+#line 266 "go_lexar.l"
 {printf(" IntegerValue: %s ",yytext);
                 tokenno++;
                 return IntegerValue;
@@ -1407,7 +1407,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 271 ".\\go_lexar.l"
+#line 271 "go_lexar.l"
 {printf(" Identifier: %s ",yytext);
                 tokenno++;
                 return IDENTIFIER;
@@ -1415,7 +1415,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 276 ".\\go_lexar.l"
+#line 276 "go_lexar.l"
 {printf(" FloatValue: %s ",yytext);
                 tokenno++;
                 return FloatValue;
@@ -1424,7 +1424,7 @@ YY_RULE_SETUP
 case 66:
 /* rule 66 can match eol */
 YY_RULE_SETUP
-#line 280 ".\\go_lexar.l"
+#line 280 "go_lexar.l"
 {printf(" StringValue: %s ",yytext);
                 tokenno++;
                 return StringValue;
@@ -1432,7 +1432,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 284 ".\\go_lexar.l"
+#line 284 "go_lexar.l"
 {printf(" ImaginaryValue: %s ",yytext);
                 tokenno++;
                 return ImaginaryValue;
@@ -1440,7 +1440,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 289 ".\\go_lexar.l"
+#line 289 "go_lexar.l"
 {printf(" : ");
                     tokenno++;
                     return COLON;
@@ -1448,7 +1448,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 293 ".\\go_lexar.l"
+#line 293 "go_lexar.l"
 {printf(" ; ");
                     tokenno++;
                     return SEMICOLON;
@@ -1457,29 +1457,29 @@ YY_RULE_SETUP
 case 70:
 /* rule 70 can match eol */
 YY_RULE_SETUP
-#line 297 ".\\go_lexar.l"
+#line 297 "go_lexar.l"
 {printf("\n%d: ",++lineno); tokenno = 0;}
 	YY_BREAK
 case 71:
 /* rule 71 can match eol */
 YY_RULE_SETUP
-#line 298 ".\\go_lexar.l"
+#line 298 "go_lexar.l"
 ;
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 299 ".\\go_lexar.l"
+#line 299 "go_lexar.l"
 { /*do nothing*/ }
 	YY_BREAK
 case 73:
 /* rule 73 can match eol */
 YY_RULE_SETUP
-#line 301 ".\\go_lexar.l"
+#line 301 "go_lexar.l"
 {printf("\n%d : ",++lineno); tokenno = 0; }
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 302 ".\\go_lexar.l"
+#line 302 "go_lexar.l"
 {
             printf("\n\nline : %d, \n%d-th token : \n%s is not valid token",lineno,++tokenno, yytext );
             exit(1);
@@ -1487,7 +1487,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 307 ".\\go_lexar.l"
+#line 307 "go_lexar.l"
 ECHO;
 	YY_BREAK
 #line 1494 "lex.yy.c"
@@ -2488,7 +2488,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 307 ".\\go_lexar.l"
+#line 307 "go_lexar.l"
 
 
 

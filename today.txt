@@ -1,34 +1,31 @@
 package main;
 
 import "fmt";
+
 func main() {
+	var a int = 1;
+
+	if a == 1 {
+		goto ERROR1;
+	};
+
+	if a == 2 {
+		goto ERROR2;
+	};
+
+	if a == 3 {
+		goto ERROR1;
+	};
 
 
-    var a []int;
-    var c, c1, c2, c3, c4 chan int;
-    var i1, i2 int;
-    select {
-        case i1 = <-c1:
-            a=1;
-        case i3, ok := (<-c3):  // same as: i3, ok := <-c3
-            if ok {
-                a+=1;
-            } else {
-                a/=1;
-            };
-        case a[f()] = <-c4:
-        default:
-            a=b;
-    }
 
-    for {  // send random sequence of bits to c
-        select {
-        case c <- 0:  // note: no statement, no fallthrough, no folding of cases
-        case c <- 1:
-        }
-    }
+	return a;
 
-    select {}  // block forever
+ERROR1: // 에러 처리 1
+	x = 1;
+	return;
 
-
+ERROR2: // 에러 처리 2
+	x = 1;
+	return count;
 };

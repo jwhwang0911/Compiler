@@ -38,3 +38,8 @@ make clean
 make -> 둘 다
 bison -v ___.y => parsing table
 Get-Content test_go.txt | 실행파일.exe => 실행
+
+
+
+
+

@@ -93,6 +93,61 @@
      CHANNELOP = 310
    };
 #endif
+/* Tokens.  */
+#define BREAK 258
+#define DEFAULT 259
+#define SELECT 260
+#define SWITCH 261
+#define CASE 262
+#define FALLTHROUGH 263
+#define IF 264
+#define ELSE 265
+#define GOTO 266
+#define RANGE 267
+#define FOR 268
+#define CONTINUE 269
+#define FUNC 270
+#define INTERFACE 271
+#define DEFER 272
+#define RETURN 273
+#define ARGS 274
+#define GO 275
+#define CHAN 276
+#define MAP 277
+#define STRUCT 278
+#define CONST 279
+#define TYPE 280
+#define VAR 281
+#define ANY 282
+#define BOOL 283
+#define BYTE 284
+#define COMPARABLE 285
+#define INT 286
+#define COMPLEX 287
+#define ERROR 288
+#define FLOAT 289
+#define STRING 290
+#define RUNE 291
+#define PACKAGE 292
+#define IMPORT 293
+#define IDENTIFIER 294
+#define IntegerValue 295
+#define FloatValue 296
+#define StringValue 297
+#define ImaginaryValue 298
+#define BooleanValue 299
+#define COLON 300
+#define SEMICOLON 301
+#define GODEF 302
+#define INCRE_DECRE 303
+#define LRSHIFT 304
+#define ARITH_ASSIGN 305
+#define BIT_ASSIGN 306
+#define AND 307
+#define OR 308
+#define COMPARE 309
+#define CHANNELOP 310
+
 
 
 

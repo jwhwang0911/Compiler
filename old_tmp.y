@@ -19,7 +19,6 @@ void yyerror(char *s);
 %token GODEF INCRE_DECRE LRSHIFT ARITH_ASSIGN BIT_ASSIGN AND OR COMPARE CHANNELOP
 
 %start SourceFile
-//SourceFile
 /* 
 
     GODEF       :=
@@ -48,8 +47,8 @@ TypeList :
             TypeList ',' Type
         |   Type
         ;
-
-TypeArgs :          '[' TypeList ']';
+TypeArgs :          '[' TypeList ']'
+                ;
 
 TypeLit : ArrayType | StructType | PointerType | FunctionType | InterfaceType |
             SliceType | MapType | ChannelType
@@ -64,7 +63,6 @@ TypeLit : ArrayType | StructType | PointerType | FunctionType | InterfaceType |
         | RUNE
         | STRING
 
-
 QualifiedIdent  :
                     IDENTIFIER '.' IDENTIFIER;
 
@@ -75,18 +73,15 @@ SliceType       :
                     '[' ']' Type;
 
 StructType      :
-                STRUCT '{' StructTypeLoop '}';
+                STRUCT '{' StructTypeLoop '}'
 
 StructTypeLoop : FieldDecl SEMICOLON ';' StructTypeLoop
-                | FieldDecl SEMICOLON
+                |
                 ;
-
 FieldDecl       :  IdentifierList Type
                 |  IdentifierList Type StringValue
                 |  EmbeddedField
-                |  EmbeddedField StringValue
-                ;
-
+                |  EmbeddedField StringValue;
 EmbeddedField   :   TypeName
                 |   '*' TypeName
                 |   TypeName TypeArgs
@@ -185,12 +180,12 @@ ConstSpecLoop   :
                 ;
 
 IdentifierList  : 
-                    IdentifierList ',' IDENTIFIER {printf("zxc ");}
-                |   IDENTIFIER {printf("wer ");}
+                    IdentifierList ',' IDENTIFIER
+                |   IDENTIFIER
                 ;                    
 ExpressionList  :    
-                    ExpressionList ',' Expression {printf("zxcv ");}
-                |   Expression {printf("zxcb ");}
+                    ExpressionList ',' Expression
+                |   Expression
                 ;
 
 // Type declarations
@@ -226,7 +221,6 @@ TypeParamDecl : IdentifierList TypeElem ;
 // Variable declarations
 VarDecl : 
             VAR VarSpec
-        |   VAR '(' ')'
         |   VAR '(' VarSpecLoop ')'
         ;
 VarSpec : 
@@ -236,20 +230,21 @@ VarSpec :
         ;
 VarSpecLoop : 
             VarSpec SEMICOLON VarSpecLoop
-        |   VarSpec SEMICOLON
+        |
         ;
 // Short variable declarations
 ShortVarDecl : IdentifierList GODEF ExpressionList ;
 // Function declarations
 FunctionDecl :
-                FUNC IDENTIFIER TypeParameters Signature Block
-            |   FUNC IDENTIFIER Signature Block
+                FUNC IDENTIFIER TypeParameters Signature FunctionBody
+            |   FUNC IDENTIFIER Signature FunctionBody
             |   FUNC IDENTIFIER TypeParameters Signature
             |   FUNC IDENTIFIER Signature
             ; // FunctionName
 // FunctionName : IDENTIFIER;
+FunctionBody : Block ;
 MethodDecl :
-                FUNC Parameters IDENTIFIER Signature Block
+                FUNC Parameters IDENTIFIER Signature FunctionBody
             |   FUNC Parameters IDENTIFIER Signature
             ; // MethodName
 
@@ -299,7 +294,7 @@ Key : IDENTIFIER | Expression | LiteralValue ; // fieldname
 // FieldName : IDENTIFIER ;
 Element : Expression | LiteralValue ;         
 // Function literals
-FunctionLit : FUNC Signature Block ;
+FunctionLit : FUNC Signature FunctionBody ;
 
 OperandName :   IDENTIFIER | QualifiedIdent ;
 
@@ -347,24 +342,13 @@ ParametersType : Type ;
 
 /*------------------------ Operators section ------------------------*/ // 12novel30
 Expression :
-                UnaryExpr {printf("1 ");}
-                |   Expression AND Expression {printf("2 ");}
-                |   Expression OR Expression {printf("3 ");}
-                |   Expression COMPARE Expression {printf("4 ");}
-                |   Expression '+' Expression {printf("5 ");}
-                |   Expression '-' Expression {printf("6 ");}
-                |   Expression '|' Expression {printf("7 ");}
-                |   Expression '^' Expression {printf("8 ");}
-                |   Expression '*' Expression {printf("9 ");}
-                |   Expression '/' Expression {printf("10 ");}
-                |   Expression '%' Expression {printf("11 ");}
-                |   Expression LRSHIFT Expression {printf("12 ");}
-                |   Expression '&' Expression {printf("13 ");}
+                    UnaryExpr
+                |   Expression binary_op Expression
                 ;
 
 UnaryExpr :
-                    PrimaryExpr {printf("14 ");}
-                |   unary_op UnaryExpr {printf("15 ");}
+                    PrimaryExpr
+                |   unary_op UnaryExpr
                 ;
 binary_op :         AND | OR | rel_op | add_op | mul_op ;
 rel_op :            COMPARE ;
@@ -372,29 +356,31 @@ add_op :            '+' | '-' | '|' | '^' ;
 mul_op :            '*' | '/' | '%' | LRSHIFT | '&'  ;
 unary_op :          '+' | '-' | '!' | '^' | '*' | '&' | CHANNELOP ;
 // Conversions
-Conversion :
-        Type '(' Expression ')'
+Conversion : 
+            Type '(' Expression ',' ')'
+        |   Type '(' Expression ')'
         ;
 /*------------------------ Statements section ------------------------*/ // 12novel30
 Statement :	// main
-				Declaration
-			|	LabeledStmt // test fin. 12-02
+				Declaration // 추가 필요
+			|	LabeledStmt //terminating -goto -break -continue
 			|	SimpleStmt
-			|	GoStmt // test fin. 12-02
-			|	ReturnStmt // test fin. 12-02
-			|	BreakStmt  // test fin. 12-02
-			|	ContinueStmt  // test fin. 12-02
-			|	GotoStmt // test fin. 12-02
-			|	FallthroughStmt // test fin. 12-02
-			|	Block
+			|	GoStmt
+			|	ReturnStmt //terminating
+			|	BreakStmt
+			|	ContinueStmt
+			|	GotoStmt //terminating
+			|	FallthroughStmt
+			|	Block //terminating
 			|	IfStmt
-			|	SwitchStmt
-			|	SelectStmt
-			|	ForStmt
-			|	DeferStmt // test fin. 12-02
+			|	SwitchStmt //terminating
+			|	SelectStmt //terminating
+			|	ForStmt //terminating
+			|	DeferStmt
 			;
-LabeledStmt :   IDENTIFIER COLON Statement ; // test fin. 12-02
+
 SimpleStmt :
+				EmptyStmt
 			|	ExpressionStmt
 			|	SendStmt
 			|	IncDecStmt
@@ -402,6 +388,7 @@ SimpleStmt :
 			|	ShortVarDecl
 			;
 //for SimpleStmt
+EmptyStmt 	:       ;
 ExpressionStmt :    Expression ;
 SendStmt :          Channel CHANNELOP Expression ;
 Channel : //for SendStmt 
@@ -413,151 +400,23 @@ assign_op : //for Assignment
 		|   '='
 		;
 //
-GoStmt : // test fin. 12-02
-             GO Expression ;
-ReturnStmt : // test fin. 12-02
-			RETURN ExpressionList
-        |   RETURN
-		;
-BreakStmt : // test fin. 12-02
-			BREAK IDENTIFIER //label
-        |   BREAK
-		;
-ContinueStmt : // test fin. 12-02
-			CONTINUE IDENTIFIER //label
-        |   CONTINUE
-		;
-GotoStmt : // test fin. 12-02
-            GOTO IDENTIFIER ; //label
-FallthroughStmt : // test fin. 12-02
-                FALLTHROUGH ;
-Block :
-            '{' StatementList '}' 
-        |   '{' '}' 
+GoStmt :            GO Expression ;
+
+FallthroughStmt :   FALLTHROUGH ;
+Block :             '{' StatementList '}' ;
 StatementList : //for block
                     Statement SEMICOLON StatementList
-                |   Statement SEMICOLON
+                |
 				;
-// IfStmt = "if" [ SimpleStmt ";" ] Expression Block [ "else" ( IfStmt | Block ) ] .
-IfStmt :
-			IF SimpleStmt SEMICOLON Expression Block ELSE IfStmt
-		| 	IF SimpleStmt SEMICOLON Expression Block ELSE Block
-		|   IF Expression Block ELSE IfStmt
-        |   IF Expression Block ELSE Block
-        |   IF Expression Block
-		;
-SwitchStmt : // 다 봤음
-			ExprSwitchStmt
-		|	TypeSwitchStmt
-		;
-ExprSwitchStmt : //for SwitchStmt
-			SWITCH SimpleStmtBrakets ExpressionBrakets '{' ExprCaseClauseLoop'}'
-        |   SWITCH SimpleStmtBrakets ExpressionBrakets '{' '}'
-        ;
-SimpleStmtBrakets : //for SwitchStmt
-            SimpleStmt SEMICOLON
-        |
-        ;
-ExpressionBrakets : //for SwitchStmt
-            Expression
-        |
-        ;
-ExprCaseClause : //for SwitchStmt
-			ExprSwitchCase COLON StatementList ;
-ExprCaseClauseLoop : //for SwitchStmt
-            ExprCaseClause ExprCaseClauseLoop
-        |   ExprCaseClause
-        ;
-ExprSwitchCase : //for SwitchStmt
-			CASE ExpressionList
-		|	DEFAULT
-		;
-TypeSwitchStmt : //for SwitchStmt
-			SWITCH SimpleStmtBrakets TypeSwitchGuard '{' TypeCaseClauseLoop '}'
-        ;
-TypeSwitchGuard : //for SwitchStmt
-			IdetifierGodefBrakets PrimaryExpr '.' '(' Type ')'
-		;
-IdetifierGodefBrakets : //for SwitchStmt
-            IDENTIFIER GODEF
-        |
-        ;
-TypeCaseClause : //for SwitchStmt
-			TypeSwitchCase COLON StatementList
-		;
-TypeCaseClauseLoop : //for SwitchStmt
-            TypeCaseClause TypeCaseClauseLoop
-        |
-        ;
-TypeSwitchCase : //for SwitchStmt
-			CASE TypeList
-		|	DEFAULT
-		;
+
 /*
 내가 for range 볼테니까
 select에서 어떤거 안되는지 찾아봐줄 수잇어/?
 
 */
-SelectStmt : // test fin. 12-02
-			SELECT '{' CommClauseLoop '}'
-		;
-CommClause : //for SelectStmt // test fin. 12-02
-			CommCase COLON StatementList
-		;
-CommClauseLoop : //for SelectStmt // test fin. 12-02
-            CommClause CommClauseLoop
-        |
-        ;
-CommCase : //for SelectStmt // test fin. 12-02
-		|	CASE RecvStmt
-        |   DEFAULT
-		;
-RecvStmt : //for SelectStmt //yet
-			ExpressionList '=' RecvExpr {printf("qwe");}
-		|	IdentifierList GODEF RecvExpr {printf("asd");}
-        |   RecvExpr
-		;
-RecvExpr : //for SelectStmt
-			Expression
-		;
-ForStmt :
-			FOR ForClauseBracket Block {printf("a ");}
-		;
-ForClauseBracket :
-            Condition {printf("b ");}
-        |   ForClause {printf("c ");}
-        |   RangeClause {printf("d ");}
-        | {printf("ttt ");}
-        ;
-Condition : //for ForStmt 
-			Expression {printf("ad ");}
-		;
-ForClause : //for ForStmt 
-			InitStmtBracket SEMICOLON ConditionBracket SEMICOLON PostStmtBracket {printf("bc ");}
-		;
-InitStmt : //for ForStmt
-			SimpleStmt
-		;
-InitStmtBracket: //for ForStmt
-            InitStmt
-        |
-        ;
-ConditionBracket : //for ForStmt
-            Condition
-        |
-        ;
-PostStmt : //for ForStmt
-			SimpleStmt
-		;
-PostStmtBracket : //for ForStmt
-            PostStmt
-        ;
-RangeClause : //for ForStmt
-			ExpressionList '=' RANGE Expression
-		|	IdentifierList GODEF RANGE Expression
-        |   RANGE Expression
-		;
-DeferStmt : // test fin. 12-02
+
+
+DeferStmt : 
 			DEFER Expression
 		;
 
@@ -567,7 +426,7 @@ SourceFile      :
 
 ImportLoop      :
                     ImportDecl SEMICOLON ImportLoop
-                | 
+                |
                 ;
 
 TopLevelLoop    :

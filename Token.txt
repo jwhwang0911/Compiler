@@ -1,0 +1,7 @@
+1 :  PACKAGE  Identifier: main  ; 
+2 :  IMPORT  StringValue: "test"  ; 
+3 : 
+4 :  FUNC  Identifier: ForStmt  S_LBRACKET  S_RBRACKET 
+5 :  Arith_Ops 
+[Syntax Error] line : 5, 1 th token : / 
+[Invalid Syntax] :: Declaration { Variable, Function, Method etc. }

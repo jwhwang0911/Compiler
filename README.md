@@ -38,3 +38,5 @@ ex) /Simple_test
     - lex, yacc 로 생성된 파일 + 실앻파일 모두 삭제
 
 3. run : 컴파일과 실행까지 한번에
+
+4. ./result < {inputfile} : input 파일 넣고 실행
